@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29021.104
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAzureFuncCosmosGraph", "BlazorAzureFuncCosmosGraph\BlazorAzureFuncCosmosGraph.csproj", "{5546B646-B5C6-417F-94C6-C8D34B6203D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcertAzureFunctions", "ConcertAzureFunctions\ConcertAzureFunctions.csproj", "{4A831FED-5995-49B3-8F90-B547C8BF30D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5546B646-B5C6-417F-94C6-C8D34B6203D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5546B646-B5C6-417F-94C6-C8D34B6203D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5546B646-B5C6-417F-94C6-C8D34B6203D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5546B646-B5C6-417F-94C6-C8D34B6203D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A831FED-5995-49B3-8F90-B547C8BF30D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A831FED-5995-49B3-8F90-B547C8BF30D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A831FED-5995-49B3-8F90-B547C8BF30D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A831FED-5995-49B3-8F90-B547C8BF30D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0DEB7DD-4517-441D-ADEC-3300D34AD3BA}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,306 @@
+﻿@page "/"
+
+
+@using System.Collections.Generic
+@using Microsoft.AspNetCore.Blazor
+@inherits IndexModel
+
+<link href="~/css/site.css" rel="stylesheet" />
+<button class="btn btn-outline-info" onclick="@AddNewConcertsMaster">Add New Concert</button>
+
+@if (showAddMaster == true)
+{
+    <table class="gridAddConcert" cellpadding="2" cellspacing="2">
+        <tr class="gridAddConcertHeader">
+            <td>
+                <h3> Add/Edit Concert Master</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="form-group">
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Hall Name</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertM.HallId" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Description</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertM.Description" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Ticket service name</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertM.TicketServiceName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Date</label>
+                        </td>
+                        <td>
+                            <input type="date" class="form-control" bind="@concertM.ConcertDate" format-value="yyyy-MM-dd" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn btn-outline-success" onclick="(async () => await SaveConcertsMaster())">Save</button>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-outline-danger" onclick=@hideAddMaster>Cancel</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}
+
+@if (showAddDetail == true)
+{
+    <table class="gridAddDetail" cellpadding="2" cellspacing="2">
+        <tr class="gridAddDetailHeader">
+            <td>
+                <h3> Add/Edit Concert Details</h3>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <table class="form-group">
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Concert No</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertD.ConcertNo" readonly />
+                        </td>
+                        <td width="20">&nbsp;</td>
+                        <td>
+                            <label for="Name" class="control-label">Artist Name</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertD.ArtistName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Comments</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertD.Notes" />
+                        </td>
+                        <td width="20">&nbsp;</td>
+                        <td>
+                            <label for="Name" class="control-label">Quantity</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertD.Quantity" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Name" class="control-label">Price</label>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" bind="@concertD.Price" />
+                        </td>
+                        <td colspan="2" align="right">
+                            <button type="submit" class="btn btn-outline-success" onclick="(async () => await SaveConcertDetails())">Save</button>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-outline-danger" onclick=@hideAddDetail>Cancel</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+}
+
+<img src="~/Images/blank.gif" alt="" width="1" height="2" />
+<hr />
+@if (arrConcertsMaster == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="form-group" cellpadding="2" cellspacing="2">
+        <tr class="gridConcerstHeader">
+            <td class="emptyCell"></td>
+            <td class="headerCellEdit"><b>Edit</b></td>
+            <td class="headerCellDelete"><b>Delete</b></td>
+            <td class="gridConcertCIDColumn">
+                <b>ConcertNo</b>&nbsp;
+                <span class="@ImageSortClass" onclick="(async () => await ConcertSorting("ConcertNo"))" />
+            </td>
+            <td class="gridConcertsSortColumn">
+                <b>Hall Name</b>&nbsp;
+                <span class="@ImageSortClass" onclick="(async () => await ConcertSorting("HallId"))" />
+            </td>
+            <td class="gridConcertsSortColumn">
+                <b>Description</b>&nbsp;
+                <span class="@ImageSortClass" onclick="(async () => await ConcertSorting("Description"))" />
+            </td>
+            <td class="gridConcertsSortDateColumn">
+                <b> Concert Date</b>&nbsp;
+                <span class="@ImageSortClass" onclick="(async () => await ConcertSorting("ConcertDate"))" />
+            </td>
+            <td class="gridConcertsSortColumn">
+                <b> Ticket service name</b>&nbsp;
+                <span class="@ImageSortClass" onclick="(async () => await ConcertSorting("TicketServiceName"))" />
+            </td>
+        </tr>
+        <tr class="gridConcertFilterRow">
+            <td class="headerCellFilter" colspan="4">
+                <span class="oi oi-magnifying-glass" /> Filter By
+            </td>
+            <td class="filterInput">
+                <input onchange=OnHallIdChanged() oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))" />
+            </td>
+            <td class="filterInput">
+                <input onchange=OnDescriptionChanged() oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))" />
+            </td>
+            <td class="filterInput"></td>
+            <td class="filterInput">
+                <input onchange=OnTicketServiceNameChanged() oninput="(this.dispatchEvent(new CustomEvent('change', {bubbles: true})))" />
+            </td>
+        </tr>
+        @foreach (var ConcertMasterObj in arrConcertsMaster)
+        {
+            <tr class="gridConcertRow" style="background-color: @(ConcertMasterObj.ConcertNo == concertIDs ? "#ECF3F4" : "#FFFFFF")">
+                <td class="gridConcertDataCell">
+
+                    @if (@ConcertMasterObj.ConcertNo == concertIDs)
+                    {
+                        @if (Imageclass == "oi oi-expand-down")
+                        {
+                            <span class="@Imageclass" onclick="(async () => await getConcertDetails(@ConcertMasterObj.ConcertNo))"></span>
+                        }
+                        else
+                        {
+                            <span class="@Imageclass" onclick=@hideConcertDetails></span>
+                        }
+
+                    }
+                    else
+                    {
+                        <span class="oi oi-expand-down" onclick="(async () => await getConcertDetails(@ConcertMasterObj.ConcertNo))"></span>
+
+                    }
+                </td>
+                <td class="gridConcertDataCell">
+
+                    <span class="oi oi-pencil" alt="Edit" onclick="(async () => await EditConcertsMaster(@ConcertMasterObj.Id))" />
+                </td>
+                <td class="gridConcertDataCell">
+
+                    <span class="oi oi-trash" alt="Delete" onclick="(async () => await DeleteConcertsMaster(@ConcertMasterObj.Id))" />
+                </td>
+                <td class="gridConcertDataCell">
+                    @ConcertMasterObj.ConcertNo
+                </td>
+                <td class="gridConcertDataCell">
+                    @ConcertMasterObj.HallId
+                </td>
+                <td class="gridConcertDataCell">
+                    @ConcertMasterObj.Description
+                </td>
+                <td class="gridConcertDataCell">
+                    @ConcertMasterObj.ConcertDate.ToString("dd.MM.yyyy")
+                </td>
+                <td class="gridConcertDataCell">
+                    @ConcertMasterObj.TicketServiceName
+                </td>
+            </tr>
+            @if (arrConcertsDetail != null)
+            {
+                @if (showDetailStatus == 1)
+                {
+                    @if (@ConcertMasterObj.ConcertNo == concertIDs)
+                    {
+
+                        <tr>
+                            <td valign="top">
+                                <button class="btn btn-outline-info" onclick="(async () => await AddNewConcertDetails(@ConcertMasterObj.ConcertNo))">Add New Detail</button>
+                            </td>
+                            <td colspan="7">
+                                <table class="griDetails">
+                                    <tr class="gridDetailsHeader" style="visibility: @(arrConcertsDetail.Length > 0 ? "visible" : "hidden")">
+                                        <td class="headerCellEdit"><b>Edit</b></td>
+                                        <td class="headerCellDelete"><b>Delete</b></td>
+                                        <td class="gridConcertCIDColumn">
+                                            <b> Concert Number</b>
+                                        </td>
+                                        <td class="gridDetailsCell">
+                                            <b>  Concert Detail Number</b>
+                                        </td>
+                                        <td class="gridDetailsCellSmall">
+                                            <b> Artist Name</b>
+                                        </td>
+                                        <td class="gridDetailsCellBig">
+                                            <b>Comments</b>
+                                        </td>
+                                        <td class="gridDetailsCellSmall">
+                                            <b>  QTY</b>
+                                        </td>
+                                        <td class="gridDetailsCellSmall">
+                                            <b> Price</b>
+                                        </td>
+                                    </tr>
+                                    @foreach (var concertDetailsObj in arrConcertsDetail)
+                                    {
+                                        <tr class="gridDetailsRow">
+                                            <td class="gridConcertDataCell">
+
+                                                <span class="oi oi-pencil" alt="Edit" onclick="(async () => await EditConcertDetails(@concertDetailsObj.Id))" />
+                                            </td>
+                                            <td class="gridConcertDataCell">
+
+                                                <span class="oi oi-trash" alt="Delete" onclick="(async () => await DeleteConcertDetails(@concertDetailsObj.Id, @concertDetailsObj.ConcertNo))" />
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.ConcertNo
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.ConcertDetailNo
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.ArtistName
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.Notes
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.Quantity
+                                            </td>
+                                            <td class="gridConcertDataCell">
+                                                @concertDetailsObj.Price
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="gridDetailsTotalRow" style="visibility: @(arrConcertsDetail.Length > 0 ? "visible" : "hidden")">
+                            <td colspan="8" align="center">
+                                Concerts Details of  Concerts NO - <strong> @ConcertMasterObj.ConcertNo </strong> ,Total @arrConcertsDetail.Length  details for this Concert
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        }
+    </table>
+}
+
+
